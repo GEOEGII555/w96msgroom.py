@@ -1,2 +1,4 @@
 __pycache__
 src\w96msgroom\__pycache__
+src\w96msgroom.egg-info
+dist
