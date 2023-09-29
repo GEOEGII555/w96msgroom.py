@@ -1,6 +1,6 @@
 import socketio
 from . import constants
-from . import User
+from .user import User
 
 class Client:
     sio: socketio.Client
@@ -64,15 +64,16 @@ class Client:
         self.on_online_users_update()
     
     def _on_user_join_message(self, user) -> None:
-        self.online_users.append(User(
+        user_obj = User(
             username=user['user'],
             user_id=user['id'],
             session_id=user['session_id'],
             color=user['color'],
             flags=user['flags']
-        ))
+        )
+        self.online_users.append(user_obj)
         if user['session_id'] != self.session_id:
-            self.on_user_join(user)
+            self.on_user_join(user_obj)
 
     def on_user_join(self, _: User) -> None:
         """
