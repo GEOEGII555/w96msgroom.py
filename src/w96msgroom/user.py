@@ -26,4 +26,7 @@ class User:
         return self.session_id == other.session_id
 
     def is_staff(self) -> bool:
+        """
+        Check if a user is a staff member.
+        """
         return 'staff' in self.flags
