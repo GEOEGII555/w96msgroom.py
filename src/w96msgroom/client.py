@@ -141,9 +141,16 @@ class Client:
         pass
 
     def update_online_users(self) -> None:
+        """
+        Request the server to bulk update the list of users.
+        If the server fulfills our request, on_online_users_update event is fired.
+        """
         self.sio.emit("online")
 
     def run(self) -> None:
+        """
+        Start the bot.
+        """
         self.sio.on("online", self._on_online_message)
         self.sio.on("auth-complete", self._on_auth_success)
         self.sio.on("user-join", self._on_user_join_message)
@@ -154,5 +161,8 @@ class Client:
         self.sio.emit("auth", {"user": self.username})
     
     def stop(self) -> None:
+        """
+        Stop it!
+        """
         self.sio.disconnect()
         self.sio = socketio.Client()
