@@ -1,6 +1,6 @@
 import socketio
 from . import constants
-from . import User, Message
+from . import User
 
 class Client:
     sio: socketio.Client
