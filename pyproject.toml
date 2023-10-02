@@ -1,6 +1,7 @@
 [project]
 name = "w96msgroom"
 version = "0.1.1"
+dynamic = ["dependencies"]
 authors = [
   { name="GEOEGII555", email="geoegii2001555@gmail.com" },
 ]
@@ -15,3 +16,10 @@ classifiers = [
 [project.urls]
 "Homepage" = "https://github.com/GEOEGII555/w96msgroom.py"
 "Bug Tracker" = "https://github.com/GEOEGII555/w96msgroom.py/issues"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
