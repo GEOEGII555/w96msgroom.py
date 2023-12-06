@@ -10,12 +10,12 @@ class Client:
     user_id: str
 
     def __init__(self, username: str) -> None:
-        self.sio = socketio.Client()
+        self.sio = socketio.Client(reconnection=True)
         self.username = username
         self.online_users = []
         self.session_id = ""
         self.user_id = ""
-    
+
     def rename(self, new_username: str) -> None:
         """
         Change the username of the bot.
@@ -24,7 +24,7 @@ class Client:
             return
         self.username = new_username
         self.sio.emit("change-user", new_username)
-    
+
     def send_text_message(self, text: str) -> None:
         """
         Send a text message.
@@ -62,7 +62,7 @@ class Client:
                 flags=user['flags']
             ))
         self.on_online_users_update()
-    
+
     def _on_user_join_message(self, user) -> None:
         user_obj = User(
             username=user['user'],
@@ -131,7 +131,7 @@ class Client:
         self.session_id = session_id
         self.user_id = user_id
         self.update_online_users()
-    
+
     def on_online_users_update(self) -> None:
         """
         Override this.
@@ -148,6 +148,10 @@ class Client:
         """
         self.sio.emit("online")
 
+    def _connected(self) -> None:
+        self.update_online_users()
+        self.sio.emit("auth", {"user": self.username})
+
     def run(self) -> None:
         """
         Start the bot.
@@ -158,12 +162,12 @@ class Client:
         self.sio.on("user-leave", self._on_user_leave_message)
         self.sio.on("nick-changed", self._on_user_change_message)
         self.sio.on("message", self._on_text_chat_message)
+        self.sio.on("connect", self._connected)
         self.sio.connect(constants.WS_URL, transports=['websocket'])
-        self.sio.emit("auth", {"user": self.username})
-    
+
     def stop(self) -> None:
         """
         Stop it!
         """
         self.sio.disconnect()
-        self.sio = socketio.Client()
+        self.sio = socketio.Client(reconnection=True)
