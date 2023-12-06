@@ -5,9 +5,9 @@ A website where you can talk with other people: [Click here](https://msgroom.win
 # Installation
 To install from the git repository, use this command:
 ```
-<your python interpreter> -m pip install git+github.com/geoegii555/w96msgroom.py@master
+<your python interpreter> -m pip install --upgrade git+github.com/geoegii555/w96msgroom.py@master
 ```
 To install from PyPi, use this command:
 ```
-<your python interpreter> -m pip install w96msgroom
+<your python interpreter> -m pip install --upgrade w96msgroom
 ```
