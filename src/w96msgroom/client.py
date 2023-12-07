@@ -1,4 +1,7 @@
+import html
+
 import socketio
+
 from . import constants
 from .user import User
 
@@ -38,7 +41,7 @@ class Client:
             return
         for x in self.online_users:
             if data['session_id'] == x.session_id:
-                self.on_text_message(x, data['content'])
+                self.on_text_message(x, html.unescape(data['content']))
                 break
         else:
             raise RuntimeError("got a text message from a user we don't know!")
