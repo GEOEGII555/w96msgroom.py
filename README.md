@@ -17,3 +17,7 @@ Then go to the newly cloned directory with `cd w96msgroom` and run:
 <your python interpreter> -m pip install .
 ```
 And it should be done.
+
+# Documentation
+
+The documentation is located on our [GitHub repository](https://github.com/GEOEGII555/w96msgroom.py). See the `documentation` folder.
