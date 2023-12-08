@@ -1,1 +1,1 @@
-WS_URL = "wss://msgroom.windows96.net/socket.io"
+WS_URL: str = "wss://msgroom.windows96.net/socket.io"

@@ -1,4 +1,5 @@
 import html
+from typing import Optional
 
 import socketio
 
@@ -6,6 +7,9 @@ from . import constants
 from .user import User
 
 class Client:
+    """
+    The base for all the bots ✨
+    """
     sio: socketio.Client
     online_users: list[User]
     session_id: str
@@ -46,11 +50,29 @@ class Client:
         else:
             raise RuntimeError("got a text message from a user we don't know!")
 
+    def is_online(self, user: User) -> bool:
+        """
+        Checks if the user is still online.
+        """
+        for online_user in self.online_users:
+            if online_user == user:
+                return True
+        return False
+    
+    def get_user(self, session_id: str) -> Optional[User]:
+        """
+        Get a user with a specific session ID.
+        """
+        for online_user in self.online_users:
+            if online_user.session_id == session_id:
+                return online_user
+        return None
+
     def on_text_message(self, _: User, __: str) -> None:
         """
         Override this.
         This function gets executed when a user (the current client is ignored, must be sent by someone else) sends a text message.
-        The user which sent the message and the content of the message is passed into the function as an argument.
+        The user which sent the message and the content of the message are passed into the function as an argument.
         """
         pass
 
@@ -146,7 +168,7 @@ class Client:
 
     def update_online_users(self) -> None:
         """
-        Request the server to bulk update the list of users.
+        Ask the server to bulk update the list of users.
         If the server fulfills our request, on_online_users_update event is fired.
         """
         self.sio.emit("online")
@@ -157,7 +179,9 @@ class Client:
 
     def run(self) -> None:
         """
-        Start the bot.
+        Start the bot ✨
+        Returns after a connection has been established.
+        This function won't wait until you stop the bot.
         """
         self.sio.on("online", self._on_online_message)
         self.sio.on("auth-complete", self._on_auth_success)
