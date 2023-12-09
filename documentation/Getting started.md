@@ -37,4 +37,5 @@ class MyPrefixBot(w96msgroom.PrefixBot):
         # ...
         pass
 ```
+We also have a built in help command in PrefixBot. See `PrefixBot().add_builtin_help()` for more info. (call it in the constructor)
 You can see more info on events and functions in the documentation.

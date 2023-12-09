@@ -1,3 +1,4 @@
+import inspect
 import traceback
 
 from .user import User
@@ -18,6 +19,26 @@ class PrefixBot(Client):
         self.prefix = prefix
         self.commands = dict()
 
+    def add_builtin_help(self) -> None:
+        '''
+        Adds the builtin help command.
+
+        ⚠️ This will raise an exception if you already have a command named "help"!
+
+        You need to specify a description for your commands in the docstrings of the handlers:
+        |class ...(w96msgroom.PrefixBot):
+        |    def cmdhandler(self, user: w96msgroom.User, args: list[str]):
+        |        """
+        |        Put your description and usage here.
+        |        [PREFIX] will be replaced with your bot's prefix. For example, your bot's prefix is \"m#\", and you write this:
+        |        Usage: [PREFIX]ben question
+        |        This will become:
+        |        Usage: m#ben question
+        |        """
+        |        # ...
+        '''
+        self.add_command("help", self._help_command)
+
     def add_command(self, name: str, handler) -> None:
         """
         Add a command.
@@ -36,6 +57,31 @@ class PrefixBot(Client):
         if name not in self.commands.keys():
             raise ValueError(f"a command with name \'{name}\' does not exist")
         del self.commands[name]
+
+    def _help_command(self, user: User, arguments: list[str]):
+        """
+        Use this command to get help on this bot.
+        Usage:
+            [PREFIX]help - list all commands.
+            [PREFIX]help commandName - get help on a specific command.
+        """
+        if len(arguments) < 1:
+            help_index = f"""**Geo96Bot - a cool msgroom bot.** (made with [w96msgroom](https://github.com/GEOEGII555/w96msgroom.py))
+*To get help on a specific command, invoke {self.prefix}help commandName.*\n"""
+            for K in self.commands:
+                help_index += K
+                help_index += ", "
+            help_index =  help_index.removesuffix(", ")
+            self.send_text_message(help_index)
+        else:
+            command_name = " ".join(arguments)
+            if command_name not in self.commands:
+                self.send_text_message(f"I don't know a command named {command_name}! Are you sure your spelling is correct?")
+                return
+            documentation = inspect.getdoc(self.commands[command_name]).replace("[PREFIX]", self.prefix)
+            if not documentation:
+                documentation = "*No docstring provided.*"
+            self.send_text_message(f"Help on command {command_name}:\n" + documentation)
 
     def on_text_message(self, user: User, message: str) -> None:
         """
