@@ -1,3 +1,5 @@
+import traceback
+
 from .user import User
 from .client import Client
 
@@ -44,9 +46,13 @@ class PrefixBot(Client):
         """
         try:
             self.handle_commands(user, message)
-        except Exception as e:
+        except Exception as exc:
+            e = type(exc).__name__
+            if str(exc):
+                e += ": " + str(exc)
             self.send_text_message(f"❌ {user.username}, an error happened: {e}{'.' if not e.endswith('.') and not e.endswith('!') and not e.endswith('?') else ''}")
-    
+            print(*traceback.format_exception(type(exc), exc, exc.__traceback__), sep="", end="")
+
     def handle_commands(self, user: User, message: str) -> None:
         """
         This function is for parsing commands.
