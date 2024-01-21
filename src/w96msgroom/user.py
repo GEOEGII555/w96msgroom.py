@@ -30,3 +30,9 @@ class User:
         Check if a user is a staff member.
         """
         return 'staff' in self.flags
+
+    def is_system(self) -> bool:
+        """
+        Check if a user is actually "System" (assuming the object contains valid data).
+        """
+        return self.session_id == "" and self.user_id == ""
