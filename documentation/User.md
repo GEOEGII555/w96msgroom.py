@@ -23,6 +23,9 @@ The color that the message room choosed for the user.
 ### `is_staff()`
 Returns a boolean value: True if the user is a staff (`"staff" in self.flags`), or False if not.
 
+### `is_system()`
+Check if a user is actually "System" (assuming the object contains valid data).
+
 ## Special functions:
 
 ### `user == another` (`__eq__`)
