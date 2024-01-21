@@ -43,6 +43,9 @@ class Client:
     def _on_text_chat_message(self, data) -> None:
         if data['session_id'] == self.session_id:
             return
+        if data['session_id'] == "" and data['id'] == "":
+            self.on_text_message(User("System", "", "", data['color'], ["system"]), html.unescape(data['content']))
+            return
         for x in self.online_users:
             if data['session_id'] == x.session_id:
                 self.on_text_message(x, html.unescape(data['content']))
