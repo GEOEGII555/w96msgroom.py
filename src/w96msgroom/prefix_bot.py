@@ -71,16 +71,18 @@ class PrefixBot(Client):
             for K in self.commands:
                 help_index += K
                 help_index += ", "
-            help_index =  help_index.removesuffix(", ")
+            help_index = help_index.removesuffix(", ")
             self.send_text_message(help_index)
         else:
             command_name = " ".join(arguments)
             if command_name not in self.commands:
                 self.send_text_message(f"I don't know a command named {command_name}! Are you sure your spelling is correct?")
                 return
-            documentation = inspect.getdoc(self.commands[command_name]).replace("[PREFIX]", self.prefix)
+            documentation = inspect.getdoc(self.commands[command_name])
             if not documentation:
                 documentation = "*No docstring provided.*"
+            else:
+                documentation = documentation.replace("[PREFIX]", self.prefix)
             self.send_text_message(f"Help on command {command_name}:\n" + documentation)
 
     def on_text_message(self, user: User, message: str) -> None:
