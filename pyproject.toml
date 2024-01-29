@@ -1,6 +1,6 @@
 [project]
 name = "w96msgroom"
-version = "0.1.5"
+version = "0.1.4"
 dynamic = ["dependencies"]
 authors = [
   { name="GEOEGII555", email="geoegii2001555@gmail.com" },
